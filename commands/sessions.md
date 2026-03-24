@@ -4,7 +4,7 @@ Run: `~/.claude/scripts/sessions.sh $ARGUMENTS`
 
 ## Behavior
 
-**No arguments** → List all sessions. Format the output cleanly for the user.
+**No arguments** → List all sessions. Format the output cleanly for the user. Include the available flags shown at the end of the output.
 
 **--find "query"** → Show matching sessions. Format the output cleanly.
 

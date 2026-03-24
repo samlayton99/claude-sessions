@@ -22,6 +22,35 @@ curl -fsSL "$REPO_URL/commands/sessions.md" -o "$COMMANDS_DIR/sessions.md"
 # Make script executable
 chmod +x "$SCRIPTS_DIR/sessions.sh"
 
+# Auto-configure permissions so the script never prompts for approval
+SETTINGS_FILE="$HOME/.claude/settings.json"
+PERM_ENTRY="Bash(~/.claude/scripts/sessions.sh:*)"
+
+python3 -c "
+import json, os, sys
+
+settings_file = sys.argv[1]
+entry = sys.argv[2]
+
+if os.path.exists(settings_file):
+    with open(settings_file) as f:
+        settings = json.load(f)
+else:
+    settings = {}
+
+perms = settings.setdefault('permissions', {})
+allow = perms.setdefault('allow', [])
+
+if entry not in allow:
+    allow.append(entry)
+    with open(settings_file, 'w') as f:
+        json.dump(settings, f, indent=2)
+        f.write('\n')
+    print(f'  Added permission: {entry}')
+else:
+    print(f'  Permission already configured.')
+" "$SETTINGS_FILE" "$PERM_ENTRY"
+
 echo ""
 echo "Installed successfully."
 echo ""
