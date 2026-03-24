@@ -1,10 +1,10 @@
 #!/bin/bash
 # Install claude-sessions
-# Usage: curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/claude-sessions/main/install.sh | bash
+# Usage: curl -fsSL https://raw.githubusercontent.com/samlayton99/claude-sessions/main/install.sh | bash
 
 set -euo pipefail
 
-REPO_URL="https://raw.githubusercontent.com/YOUR_USERNAME/claude-sessions/main"
+REPO_URL="https://raw.githubusercontent.com/samlayton99/claude-sessions/main"
 
 SCRIPTS_DIR="$HOME/.claude/scripts"
 COMMANDS_DIR="$HOME/.claude/commands"
