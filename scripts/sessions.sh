@@ -9,6 +9,7 @@
 #   sessions.sh --delete               # delete all unnamed sessions (dry run)
 #   sessions.sh --delete "name" --yes  # actually delete session by name
 #   sessions.sh --delete --yes         # actually delete all unnamed sessions
+#   sessions.sh --new "name"           # create a new named session
 
 set -euo pipefail
 
@@ -41,6 +42,12 @@ while [[ $# -gt 0 ]]; do
       fi
       shift
       ;;
+    --new)
+      MODE="new"
+      TARGET="${2:-}"
+      shift
+      [ -n "$TARGET" ] && shift
+      ;;
     --yes)
       CONFIRM="true"
       shift
@@ -53,7 +60,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 exec python3 -c '
-import json, os, sys, glob, shutil
+import json, os, sys, glob, shutil, uuid
 from datetime import datetime
 
 proj_dir = sys.argv[1]
@@ -165,6 +172,7 @@ if mode == "list":
         print(f"Total: {len(sessions)} session(s)")
     print()
     print("Flags:")
+    print("  --new \"name\"      Create a new named session")
     print("  --find \"query\"    Search sessions by name")
     print("  --delete \"name\"   Delete a session by name")
     print("  --delete          Delete all unnamed sessions")
@@ -184,6 +192,22 @@ elif mode == "find":
             print(fmt_session_line(s, active_ids))
             print()
         print(f"Found: {len(matches)} session(s)")
+
+elif mode == "new":
+    if not target:
+        print("Usage: sessions.sh --new \"session name\"")
+        sys.exit(1)
+    # Check if a session with this name already exists
+    for s in sessions:
+        if s["title"] == target:
+            print(f"A session named \"{target}\" already exists.")
+            sys.exit(1)
+    sid = str(uuid.uuid4())
+    fpath = os.path.join(proj_dir, sid + ".jsonl")
+    with open(fpath, "w") as f:
+        f.write(json.dumps({"type": "custom-title", "customTitle": target, "sessionId": sid}) + "\n")
+    print(f"Created session: \"{target}\"")
+    print(f"Use /resume to switch to it.")
 
 elif mode == "delete":
     if target:
