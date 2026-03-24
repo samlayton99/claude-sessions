@@ -22,25 +22,25 @@ That's it. Two files get placed into `~/.claude/`:
 Inside Claude Code, type:
 
 ```
-/user:sessions
+/sessions
 ```
 
 List all sessions for the current project.
 
 ```
-/user:sessions --find "auth"
+/sessions --find "auth"
 ```
 
 Find sessions whose title matches "auth".
 
 ```
-/user:sessions --delete "auth-system"
+/sessions --delete "auth-system"
 ```
 
 Delete a session by name. Claude will show you what will be deleted and ask for confirmation before proceeding.
 
 ```
-/user:sessions --delete
+/sessions --delete
 ```
 
 Delete **all unnamed sessions** in the current project. Same confirmation flow — Claude shows the list first, then asks before deleting.
