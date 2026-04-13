@@ -13,7 +13,7 @@
 
 set -euo pipefail
 
-PROJ=$(echo "$PWD" | sed 's|/|-|g')
+PROJ=$(echo "$PWD" | sed 's|\.|-|g' | sed 's|/|-|g')
 DIR="$HOME/.claude/projects/$PROJ"
 
 if [ ! -d "$DIR" ]; then
